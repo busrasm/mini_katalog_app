@@ -1,55 +1,63 @@
 import 'package:flutter/material.dart';
+import '../models/product.dart';
+import '../models/product_service.dart';
 import '../widgets/product_card.dart';
 import 'product_detail_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> products = [
-      {
-        'title': 'Kırmızı Çanta',
-        'description': 'Şık ve dayanıklı.',
-        'icon': Icons.shopping_bag,
-      },
-      {
-        'title': 'Mavi Ayakkabı',
-        'description': 'Günlük kullanım için ideal.',
-        'icon': Icons.checkroom,
-      },
-      {
-        'title': 'Siyah Saat',
-        'description': 'Klasik tasarım.',
-        'icon': Icons.watch,
-      },
-      {
-        'title': 'Beyaz Kulaklık',
-        'description': 'Yüksek ses kalitesi.',
-        'icon': Icons.headphones,
-      },
-    ];
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends State<HomeScreen> {
+  final ProductService _productService = ProductService();
+  late Future<List<Product>> _productsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _productsFuture = _productService.fetchProducts();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Mini Katalog')),
-      body: ListView.builder(
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          final product = products[index];
-          return ProductCard(
-            title: product['title'],
-            description: product['description'],
-            icon: product['icon'],
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProductDetailScreen(
-                    title: product['title'],
-                    description: product['description'],
-                    icon: product['icon'],
-                  ),
-                ),
+      body: FutureBuilder<List<Product>>(
+        future: _productsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('Hata: ${snapshot.error}'));
+          }
+
+          final products = snapshot.data ?? [];
+
+          return ListView.builder(
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              final product = products[index];
+              return ProductCard(
+                title: product.title,
+                description: product.description,
+                icon: Icons.shopping_bag,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetailScreen(
+                        title: product.title,
+                        description: product.description,
+                        icon: Icons.shopping_bag,
+                      ),
+                    ),
+                  );
+                },
               );
             },
           );
