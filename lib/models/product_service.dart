@@ -1,21 +1,56 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'product.dart';
 
 class ProductService {
-  static const String _baseUrl = 'https://dummyjson.com/products';
+  // Gerçek bir API yerine, JSON formatında sabit (simüle edilmiş) veri.
+  static const String _simulatedJsonResponse = '''
+  {
+    "products": [
+      {
+        "id": 1,
+        "title": "Kırmızı Sırt Çantası",
+        "description": "Günlük kullanım için şık ve dayanıklı sırt çantası.",
+        "price": 45.99,
+        "category": "Çanta"
+      },
+      {
+        "id": 2,
+        "title": "Mavi Spor Ayakkabı",
+        "description": "Rahat taban, nefes alabilir kumaş.",
+        "price": 79.50,
+        "category": "Ayakkabı"
+      },
+      {
+        "id": 3,
+        "title": "Siyah Kol Saati",
+        "description": "Klasik tasarım, deri kayış.",
+        "price": 120.00,
+        "category": "Aksesuar"
+      },
+      {
+        "id": 4,
+        "title": "Beyaz Kablosuz Kulaklık",
+        "description": "Yüksek ses kalitesi, uzun pil ömrü.",
+        "price": 65.00,
+        "category": "Elektronik"
+      },
+      {
+        "id": 5,
+        "title": "Gri Kapüşonlu Sweatshirt",
+        "description": "Yumuşak dokulu, kışlık kumaş.",
+        "price": 55.00,
+        "category": "Giyim"
+      }
+    ]
+  }
+  ''';
 
   Future<List<Product>> fetchProducts() async {
-    final response = await http.get(Uri.parse(_baseUrl));
+    // Gerçek bir ağ isteğini simüle etmek için kısa bir gecikme
+    await Future.delayed(const Duration(seconds: 1));
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final List<dynamic> productList = data['products'];
-      return productList.map((json) => Product.fromJson(json)).toList();
-    } else {
-      throw Exception(
-        'Ürünler yüklenemedi (Hata kodu: ${response.statusCode})',
-      );
-    }
+    final data = jsonDecode(_simulatedJsonResponse);
+    final List<dynamic> productList = data['products'];
+    return productList.map((json) => Product.fromJson(json)).toList();
   }
 }

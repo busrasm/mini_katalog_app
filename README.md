@@ -1,17 +1,34 @@
-# mini_katalog_app
+# 🛍️ Mini Katalog App
 
-A new Flutter project.
+Flutter ile geliştirilmiş, gerçek bir API'den (dummyjson.com) canlı veri çeken, sepet sistemi içeren mini bir e-ticaret katalog uygulaması.
 
-## Getting Started
+## 📱 Özellikler
 
-This project is a starting point for a Flutter application.
+- Ürünleri ızgara (grid) görünümünde listeleme
+- Ürün detay sayfası (görsel, fiyat, kategori, açıklama)
+- Sepete ürün ekleme / çıkarma
+- Toplam tutar hesaplama
+- `Provider` ile state yönetimi
+- Gerçek zamanlı API entegrasyonu (dummyjson.com)
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠️ Kullanılan Teknolojiler
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+- **Flutter** & **Dart**
+- `http` — API istekleri için
+- `provider` — state yönetimi için
+- [dummyjson.com](https://dummyjson.com/products) — ürün verisi kaynağı
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📂 Proje Yapısı
+
+lib/
+├── main.dart
+├── models/
+│   ├── product.dart          # Product veri modeli
+│   ├── product_service.dart  # API'den veri çekme servisi
+│   └── cart_manager.dart     # Sepet state yönetimi (ChangeNotifier)
+├── views/
+│   ├── home_screen.dart          # Ana sayfa (ürün ızgarası)
+│   ├── product_detail_screen.dart # Ürün detay sayfası
+│   └── cart_screen.dart          # Sepet sayfası
+└── widgets/
+└── product_card.dart      # Yeniden kullanılabilir ürün kartı
